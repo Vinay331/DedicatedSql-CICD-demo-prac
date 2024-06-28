@@ -1,0 +1,20 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: |
+    echo "Building SQL Scripts"
+    mkdir $(Build.ArtifactStagingDirectory)/sql-scripts
+    cp CreateDatabase.sql $(Build.ArtifactStagingDirectory)/sql-scripts/
+    cp InsertData.sql $(Build.ArtifactStagingDirectory)/sql-scripts/
+    cp QueryData.sql $(Build.ArtifactStagingDirectory)/sql-scripts/
+  displayName: 'Copy SQL Scripts'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/sql-scripts'
+    ArtifactName: 'sql-scripts'
+    publishLocation: 'Container'
